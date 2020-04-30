@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Configuration后面的status，这个用于设置log4j2自身内部的信息输出，可以不设置，当设置成trace时，你会看到log4j2内部各种详细输出-->
+<!--monitorInterval：Log4j能够自动检测修改配置 文件和重新配置本身，设置间隔秒数-->
+<Configuration status="WARN" monitorInterval="30">
+    <!-- 全局变量,此处是日志位置 -->
+    <properties>
+        <property name="log.base">/opt/logs/log-framework/log4j2</property>
+    </properties>
+
+    <Filters>
+        <!-- 过滤掉password或者pwd的内容 -->
+        <RegexFilter regex=".*password.*|.*pwd.*" onMatch="DENY" onMismatch="ACCEPT"/>
+        <!-- 过滤掉5点时间段日志 -->
+        <TimeFilter start="05:00:00" end="05:30:00" onMatch="DENY" onMismatch="ACCEPT"/>
+    </Filters>
+
+    <Appenders>
+        <!-- 控制台输出 -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+        <!-- info级别文件输出, 按天按大小生成 -->
+        <!-- 这个会打印出所有的info及以下级别的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档-->
+        <RollingFile name="DEBUG"
+                     fileName="${log.base}/debug.log"
+                     filePattern="${log.base}/debug-%d{yyyy-MM-dd}-%i.log">
+            <Filters>
+                <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+                <!--随便提供一个高级别日志，用于允许打印高级日志-->
+                <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
+            <Policies>
+                <!--
+                备份策略
+                modulate true/false   以0点进行计算
+                interval             filePattern值的几倍,此处是0点切换
+                -->
+                <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
+                <SizeBasedTriggeringPolicy size="1 KB"/>
+            </Policies>
+            <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件，这里设置了7 -->
+            <DefaultRolloverStrategy max="7"/>
+        </RollingFile>
+        <!-- info级别文件输出, 按天按大小生成 -->
+        <!-- 这个会打印出所有的info及以下级别的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档-->
+        <RollingFile name="INFO"
+                     fileName="${log.base}/info.log"
+                     filePattern="${log.base}/info-%d{yyyy-MM-dd}-%i.log">
+            <Filters>
+                <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
+            <Policies>
+                <!--
+                备份策略
+                modulate true/false   以0点进行计算
+                interval             filePattern值的几倍,此处是0点切换
+                -->
+                <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+            <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件，这里设置了7 -->
+            <DefaultRolloverStrategy max="7"/>
+        </RollingFile>
+        <!-- warn级别文件输出, 按天按大小生成 -->
+        <RollingFile name="WARN"
+                     fileName="${log.base}/warn.log"
+                     filePattern="${log.base}/warn-%d{yyyy-MM-dd}-%i.log">
+            <Filters>
+                <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+                <ThresholdFilter level="WARN" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
+            <Policies>
+                <!--
+                备份策略
+                modulate true/false   以0点进行计算
+                interval             filePattern值的几倍,此处是0点切换
+                -->
+                <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+            <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件，这里设置了7 -->
+            <DefaultRolloverStrategy max="7"/>
+        </RollingFile>
+        <!-- error级别文件输出, 按天按大小生成 -->
+        <RollingFile name="ERROR"
+                     fileName="${log.base}/error.log"
+                     filePattern="${log.base}/error-%d{yyyy-MM-dd}-%i.log">
+            <Filters>
+                <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+                <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
+            <Policies>
+                <!--
+                备份策略
+                modulate true/false   以0点进行计算
+                interval             filePattern值的几倍,此处是0点切换
+                -->
+                <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+            <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件，这里设置了7 -->
+            <DefaultRolloverStrategy max="7"/>
+        </RollingFile>
+        <!-- bussiness业务日志文件输出, 按天按大小生成 -->
+        <!-- 这个会打印出所有的info及以下级别的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档-->
+        <RollingFile name="bussiness"
+                     fileName="${log.base}/bussiness.log"
+                     filePattern="${log.base}/bussiness-%d{yyyy-MM-dd}-%i.log">
+            <Filters>
+                <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
+            <Policies>
+                <!--
+                备份策略
+                modulate true/false   以0点进行计算
+                interval             filePattern值的几倍,此处是0点切换
+                -->
+                <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
+                <SizeBasedTriggeringPolicy size="1 KB"/>
+            </Policies>
+            <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件，这里设置了7 -->
+            <DefaultRolloverStrategy max="7"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <logger name="bussiness">
+            <AppenderRef ref="bussiness"/>
+        </logger>
+        <Root level="ALL">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="DEBUG"/>
+            <AppenderRef ref="INFO"/>
+            <AppenderRef ref="WARN"/>
+            <AppenderRef ref="ERROR"/>
+        </Root>
+    </Loggers>
+</Configuration>

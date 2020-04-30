@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--logback能够自动检测修改配置 文件和重新配置本身，设置间隔秒数-->
+<configuration scan="true" scanPeriod="30 seconds" debug="false">
+    <!-- 全局变量,此处是日志位置 -->
+    <property name="log.base" value="/opt/logs/log-framework/logback"/>
+
+    <!-- 控制台输出 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+            <charset>utf-8</charset>
+        </encoder>
+        <!-- 设置特殊内容过滤, 1此处需要引入 org.codehaus.janino.janino包, 2onMatch匹配就拒绝 -->
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator>
+                <!-- 默认为 ch.qos.logback.classic.boolex.JaninoEventEvaluator -->
+                <!-- 过滤掉password或者pwd的内容 -->
+                <expression>return message.contains("password")||message.contains("pwd");</expression>
+            </evaluator>
+            <OnMatch>DENY</OnMatch>
+            <OnMismatch>ACCEPT</OnMismatch>
+        </filter>
+    </appender>
+
+    <!-- error级别文件输出, 按天生成 -->
+    <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.base}/error.log</file>
+        <encoder>
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+            <charset>utf-8</charset>
+        </encoder>
+        <!-- 只接受error级别[必须在前面] -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <!-- 设置特殊内容过滤[必须在指定level前面], 1此处需要引入 org.codehaus.janino.janino包, 2onMatch匹配就拒绝 -->
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator>
+                <!-- 默认为 ch.qos.logback.classic.boolex.JaninoEventEvaluator -->
+                <!-- 过滤掉password或者pwd的内容 -->
+                <expression>return message.contains("password")||message.contains("pwd");</expression>
+            </evaluator>
+            <OnMatch>DENY</OnMatch>
+            <OnMismatch>ACCEPT</OnMismatch>
+        </filter>
+        <!-- 滚动策略 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${log.base}/error.%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+            <!-- keep 7 days' worth of history -->
+            <maxHistory>7</maxHistory>
+            <!-- 超过1G删除旧日志 -->
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+    <!-- warn级别文件输出, 按天生成 -->
+    <appender name="WARN" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.base}/warn.log</file>
+        <encoder>
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+            <charset>utf-8</charset>
+        </encoder>
+        <!-- 只接受warn级别[必须在前面] -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+        <!-- 设置特殊内容过滤, 1此处需要引入 org.codehaus.janino.janino包, 2onMatch匹配就拒绝 -->
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator>
+                <!-- 默认为 ch.qos.logback.classic.boolex.JaninoEventEvaluator -->
+                <!-- 过滤掉password或者pwd的内容 -->
+                <expression>return message.contains("password")||message.contains("pwd");</expression>
+            </evaluator>
+            <OnMatch>DENY</OnMatch>
+            <OnMismatch>ACCEPT</OnMismatch>
+        </filter>
+        <!-- 滚动策略 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${log.base}/warn.%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+            <!-- keep 7 days' worth of history -->
+            <maxHistory>7</maxHistory>
+            <!-- 超过1G删除旧日志 -->
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+    <!-- info级别文件输出, 按天生成 -->
+    <appender name="INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.base}/info.log</file>
+        <encoder>
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+            <charset>utf-8</charset>
+        </encoder>
+        <!-- 只接受info级别[必须在前面] -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <!-- 设置特殊内容过滤, 1此处需要引入 org.codehaus.janino.janino包, 2onMatch匹配就拒绝 -->
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator>
+                <!-- 默认为 ch.qos.logback.classic.boolex.JaninoEventEvaluator -->
+                <!-- 过滤掉password或者pwd的内容 -->
+                <expression>return message.contains("password")||message.contains("pwd");</expression>
+            </evaluator>
+            <OnMatch>DENY</OnMatch>
+            <OnMismatch>ACCEPT</OnMismatch>
+        </filter>
+        <!-- 滚动策略 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${log.base}/info.%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+            <!-- keep 7 days' worth of history -->
+            <maxHistory>7</maxHistory>
+            <!-- 超过1G删除旧日志 -->
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+    <!-- debug级别文件输出, 按天生成, 按大小生成 -->
+    <appender name="DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.base}/debug.log</file>
+        <encoder>
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+            <charset>utf-8</charset>
+        </encoder>
+        <!-- 只接受info级别[必须在前面] -->
+        <!--<filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>-->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+        <!-- 设置特殊内容过滤, 1此处需要引入 org.codehaus.janino.janino包, 2onMatch匹配就拒绝 -->
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator>
+                <!-- 默认为 ch.qos.logback.classic.boolex.JaninoEventEvaluator -->
+                <!-- 过滤掉password或者pwd的内容 -->
+                <expression>return message.contains("password")||message.contains("pwd");</expression>
+            </evaluator>
+            <OnMatch>DENY</OnMatch>
+            <OnMismatch>ACCEPT</OnMismatch>
+        </filter>
+        <!-- 滚动策略 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${log.base}/debug.%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
+            <!-- 每个文件的最大值, 单位看ch.qos.logback.core.util.FileSize -->
+            <maxFileSize>1KB</maxFileSize>
+            <!-- keep 7 days' worth of history -->
+            <maxHistory>7</maxHistory>
+            <!-- 超过1G删除旧日志 -->
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+    <!-- bussiness业务日志文件输出, 按天生成, 按大小生成 -->
+    <appender name="bussiness" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.base}/bussiness.log</file>
+        <encoder>
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+			<charset>utf-8</charset>
+        </encoder>
+        <!-- 只接受info级别[必须在前面] -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <!-- 设置特殊内容过滤, 1此处需要引入 org.codehaus.janino.janino包, 2onMatch匹配就拒绝 -->
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator>
+                <!-- 默认为 ch.qos.logback.classic.boolex.JaninoEventEvaluator -->
+                <!-- 过滤掉password或者pwd的内容 -->
+                <expression>return message.contains("password")||message.contains("pwd");</expression>
+            </evaluator>
+            <OnMatch>DENY</OnMatch>
+            <OnMismatch>ACCEPT</OnMismatch>
+        </filter>
+        <!-- 滚动策略 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${log.base}/bussiness.%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
+            <!-- 每个文件的最大值, 单位看ch.qos.logback.core.util.FileSize -->
+            <maxFileSize>1KB</maxFileSize>
+            <!-- keep 7 days' worth of history -->
+            <maxHistory>7</maxHistory>
+            <!-- 超过1G删除旧日志 -->
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- 业务日志打印到采集器中,LoggerFactory.getLogger("bussiness") -->
+    <logger name="bussiness">
+        <appender-ref ref="bussiness"/>
+    </logger>
+    <root level="ALL">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="DEBUG"/>
+        <appender-ref ref="INFO"/>
+        <appender-ref ref="WARN"/>
+        <appender-ref ref="ERROR"/>
+    </root>
+</configuration>
