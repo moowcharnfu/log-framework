@@ -7,6 +7,8 @@
         <property name="log.base">/opt/logs/log-framework/log4j2</property>
     </properties>
 
+    <!--全局Filter, 日志级别 INFO-->
+    <ThresholdFilter level="INFO"/>
     <Filters>
         <!-- 过滤掉password或者pwd的内容 -->
         <RegexFilter regex=".*password.*|.*pwd.*" onMatch="DENY" onMismatch="ACCEPT"/>
@@ -21,9 +23,11 @@
         </Console>
         <!-- info级别文件输出, 按天按大小生成 -->
         <!-- 这个会打印出所有的info及以下级别的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档-->
+        <!-- Async Loggers will auto-flush in batches, so switch off immediateFlush. -->
         <RollingFile name="DEBUG"
                      fileName="${log.base}/debug.log"
-                     filePattern="${log.base}/debug-%d{yyyy-MM-dd}-%i.log">
+                     filePattern="${log.base}/debug-%d{yyyy-MM-dd}-%i.log"
+                     immediateFlush="false" append="false">
             <Filters>
                 <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
                 <!--随便提供一个高级别日志，用于允许打印高级日志-->
@@ -46,7 +50,8 @@
         <!-- 这个会打印出所有的info及以下级别的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档-->
         <RollingFile name="INFO"
                      fileName="${log.base}/info.log"
-                     filePattern="${log.base}/info-%d{yyyy-MM-dd}-%i.log">
+                     filePattern="${log.base}/info-%d{yyyy-MM-dd}-%i.log"
+                     immediateFlush="false" append="false">
             <Filters>
                 <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
                 <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
@@ -67,7 +72,8 @@
         <!-- warn级别文件输出, 按天按大小生成 -->
         <RollingFile name="WARN"
                      fileName="${log.base}/warn.log"
-                     filePattern="${log.base}/warn-%d{yyyy-MM-dd}-%i.log">
+                     filePattern="${log.base}/warn-%d{yyyy-MM-dd}-%i.log"
+                     immediateFlush="false" append="false">
             <Filters>
                 <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
                 <ThresholdFilter level="WARN" onMatch="ACCEPT" onMismatch="DENY"/>
@@ -88,7 +94,8 @@
         <!-- error级别文件输出, 按天按大小生成 -->
         <RollingFile name="ERROR"
                      fileName="${log.base}/error.log"
-                     filePattern="${log.base}/error-%d{yyyy-MM-dd}-%i.log">
+                     filePattern="${log.base}/error-%d{yyyy-MM-dd}-%i.log"
+                     immediateFlush="false" append="false">
             <Filters>
                 <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
                 <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
@@ -110,7 +117,8 @@
         <!-- 这个会打印出所有的info及以下级别的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档-->
         <RollingFile name="bussiness"
                      fileName="${log.base}/bussiness.log"
-                     filePattern="${log.base}/bussiness-%d{yyyy-MM-dd}-%i.log">
+                     filePattern="${log.base}/bussiness-%d{yyyy-MM-dd}-%i.log"
+                     immediateFlush="false" append="false">
             <Filters>
                 <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
                 <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
@@ -128,32 +136,22 @@
             <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件，这里设置了7 -->
             <DefaultRolloverStrategy max="7"/>
         </RollingFile>
-        <!-- Register Async appender -->
-        <Async name="Async_DEBUG">
-            <AppenderRef ref="DEBUG"/>
-        </Async>
-        <Async name="Async_INFO">
-            <AppenderRef ref="INFO"/>
-        </Async>
-        <Async name="Async_WARN">
-            <AppenderRef ref="WARN"/>
-        </Async>
-        <Async name="Async_ERROR">
-            <AppenderRef ref="ERROR"/>
-        </Async>
     </Appenders>
 
     <Loggers>
-        <logger name="bussiness">
-            <AppenderRef ref="bussiness"/>
-        </logger>
+        <!-- 异步写日志性能最佳, 推荐使用 -->
         <!--异步logger, 开启Async, 跟Root不同时生效-->
-        <AsyncLogger name="cn.com.tcsl.log" level="INFO" additivity="false">
-            <AppenderRef ref="Async_INFO"/>
+        <!-- pattern layout actually uses location, so we need to include it -->
+        <AsyncLogger name="bussiness" level="INFO" includeLocation="true">
+            <AppenderRef ref="bussiness"/>
+            <AppenderRef ref="Console"/>
+        </AsyncLogger>
+        <AsyncLogger name="cn.com.tcsl.log" level="INFO" includeLocation="true">
+            <AppenderRef ref="INFO"/>
             <AppenderRef ref="Console"/>
         </AsyncLogger>
         <!--设置AsyncLogger时, Root不生效-->
-        <Root level="ALL">
+        <Root level="ALL" includeLocation="true">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="DEBUG"/>
             <AppenderRef ref="INFO"/>
