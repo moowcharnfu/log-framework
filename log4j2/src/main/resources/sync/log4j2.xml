@@ -40,7 +40,14 @@
                 <SizeBasedTriggeringPolicy size="1 KB"/>
             </Policies>
             <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件，这里设置了7 -->
-            <DefaultRolloverStrategy max="7"/>
+            <DefaultRolloverStrategy max="7">
+                <!-- 0点自动删除7天前的日志 -->
+                <Delete basePath="${log.base}" maxDepth="1">
+                    <IfFileName glob="debug*.log">
+                        <IfLastModified age="P7D"/>
+                    </IfFileName>
+                </Delete>
+            </DefaultRolloverStrategy>
         </RollingFile>
         <!-- info级别文件输出, 按天按大小生成 -->
         <!-- 这个会打印出所有的info及以下级别的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档-->
@@ -62,7 +69,14 @@
                 <SizeBasedTriggeringPolicy size="100 MB"/>
             </Policies>
             <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件，这里设置了7 -->
-            <DefaultRolloverStrategy max="7"/>
+            <DefaultRolloverStrategy max="7">
+                <!-- 0点自动删除7天前的日志 -->
+                <Delete basePath="${log.base}" maxDepth="1">
+                    <IfFileName glob="info*.log">
+                        <IfLastModified age="P7D"/>
+                    </IfFileName>
+                </Delete>
+            </DefaultRolloverStrategy>
         </RollingFile>
         <!-- warn级别文件输出, 按天按大小生成 -->
         <RollingFile name="WARN"
@@ -83,7 +97,14 @@
                 <SizeBasedTriggeringPolicy size="100 MB"/>
             </Policies>
             <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件，这里设置了7 -->
-            <DefaultRolloverStrategy max="7"/>
+            <DefaultRolloverStrategy max="7">
+                <!-- 0点自动删除7天前的日志 -->
+                <Delete basePath="${log.base}" maxDepth="1">
+                    <IfFileName glob="warn*.log">
+                        <IfLastModified age="P7D"/>
+                    </IfFileName>
+                </Delete>
+            </DefaultRolloverStrategy>
         </RollingFile>
         <!-- error级别文件输出, 按天按大小生成 -->
         <RollingFile name="ERROR"
@@ -104,7 +125,14 @@
                 <SizeBasedTriggeringPolicy size="100 MB"/>
             </Policies>
             <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件，这里设置了7 -->
-            <DefaultRolloverStrategy max="7"/>
+            <DefaultRolloverStrategy max="7">
+                <!-- 0点自动删除7天前的日志 -->
+                <Delete basePath="${log.base}" maxDepth="1">
+                    <IfFileName glob="error*.log">
+                        <IfLastModified age="P7D"/>
+                    </IfFileName>
+                </Delete>
+            </DefaultRolloverStrategy>
         </RollingFile>
         <!-- bussiness业务日志文件输出, 按天按大小生成 -->
         <!-- 这个会打印出所有的info及以下级别的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档-->
@@ -126,7 +154,14 @@
                 <SizeBasedTriggeringPolicy size="1 KB"/>
             </Policies>
             <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件，这里设置了7 -->
-            <DefaultRolloverStrategy max="7"/>
+            <DefaultRolloverStrategy max="7">
+                <!-- 0点自动删除7天前的日志 -->
+                <Delete basePath="${log.base}" maxDepth="1">
+                    <IfFileName glob="bussiness*.log">
+                        <IfLastModified age="P7D"/>
+                    </IfFileName>
+                </Delete>
+            </DefaultRolloverStrategy>
         </RollingFile>
     </Appenders>
 
