@@ -179,11 +179,9 @@
         <!-- pattern layout actually uses location, so we need to include it -->
         <AsyncLogger name="bussiness" level="INFO" includeLocation="true">
             <AppenderRef ref="bussiness"/>
-            <AppenderRef ref="Console"/>
         </AsyncLogger>
-        <AsyncLogger name="cn.com.tcsl.log" level="INFO" includeLocation="true">
-            <AppenderRef ref="INFO"/>
-            <AppenderRef ref="Console"/>
+        <AsyncLogger name="cn.***.log" level="INFO" includeLocation="true">
+            <AppenderRef ref="INFO"//>
         </AsyncLogger>
         <!--设置AsyncLogger时, Root不生效-->
         <Root level="ALL" includeLocation="true">
