@@ -180,17 +180,14 @@
         <AsyncLogger name="bussiness" level="INFO" includeLocation="true">
             <ThresholdFilter level="INFO"/>
             <AppenderRef ref="bussiness"/>
-            <AppenderRef ref="Console"/>
         </AsyncLogger>
-        <AsyncLogger name="cn.com.tcsl.log" level="INFO" includeLocation="true">
+        <AsyncLogger name="cn.***.log" level="INFO" includeLocation="true">
             <ThresholdFilter level="INFO"/>
             <AppenderRef ref="INFO"/>
-            <AppenderRef ref="Console"/>
         </AsyncLogger>
-        <AsyncLogger name="cn.com.tcsl.log.1" level="DEBUG" includeLocation="true">
+        <AsyncLogger name="cn.***.log.1" level="DEBUG" includeLocation="true">
             <ThresholdFilter level="DEBUG"/>
             <AppenderRef ref="INFO"/>
-            <AppenderRef ref="Console"/>
         </AsyncLogger>
         <!--设置AsyncLogger时, Root不生效-->
         <Root level="ALL" includeLocation="true">
